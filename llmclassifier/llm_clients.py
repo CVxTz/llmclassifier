@@ -16,6 +16,7 @@ llm_medium = ChatOpenAI(
     model=MEDIUM_MODEL,
     openai_api_key=os.environ.get("LLM_API_KEY"),
     temperature=0,
+    max_retries=10,
 )
 
 lmm_large = ChatOpenAI(
@@ -23,4 +24,5 @@ lmm_large = ChatOpenAI(
     model=LARGE_MODEL,
     openai_api_key=os.environ.get("LLM_API_KEY"),
     temperature=0,
+    max_retries=10,
 )

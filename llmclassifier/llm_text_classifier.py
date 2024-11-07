@@ -1,6 +1,6 @@
 from chromadb.api.types import EmbeddingFunction
 from chromadb.utils import embedding_functions
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_core.language_models.chat_models import BaseChatModel
