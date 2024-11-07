@@ -7,7 +7,7 @@ def generate_classification_model(list_classes: list[str]):
     assert list_classes
 
     class ClassificationOutput(BaseModel):
-        category: Literal[*list_classes]
+        category: Literal[tuple(list_classes)]
 
     return ClassificationOutput
 

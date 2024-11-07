@@ -1,49 +1,36 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
 
 env:
   LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
   LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, '3.10', 3.11]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Set up Python 3.10
-      - name: Set up Python 3.10
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
 
-      # Install dependencies from requirements.txt
       - name: Install dependencies
         run: pip install -r requirements.txt && pip install -r requirements-dev.txt
 
-      # Lint with ruff
       - name: Lint with ruff
         run: ruff check --fix --exit-non-zero-on-fix .
 
-      # Run tests
       - name: Run tests
         run: make test
