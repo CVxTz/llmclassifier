@@ -7,8 +7,8 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 
-from llmclassifier.data_model import generate_classification_model
-from llmclassifier.llm_clients import llm_medium
+from llmclassifier.data_model import generate_multi_class_classification_model
+from llmclassifier.llm_clients import llm_openai_client
 
 
 class ChromaEmbeddingsAdapter(Embeddings):
@@ -22,7 +22,7 @@ class ChromaEmbeddingsAdapter(Embeddings):
         return self.ef([query])[0]
 
 
-class LLMTextClassifier:
+class LLMTextMultiClassClassifier:
     def __init__(
         self,
         categories: list[str],
@@ -31,7 +31,7 @@ class LLMTextClassifier:
             template="Classify the following text into one of the following classes: {categories}.\n "
             "Use the following schema: {schema}",
         ),
-        llm_client: BaseChatModel = llm_medium,
+        llm_client: BaseChatModel = llm_openai_client,
         max_examples: int = 5,
     ):
         assert set(
@@ -40,7 +40,7 @@ class LLMTextClassifier:
             {"categories", "schema"}
         ), "System prompt template should be included in the following input variables: categories, schema"
         self.categories = categories
-        self.categories_model = generate_classification_model(categories)
+        self.categories_model = generate_multi_class_classification_model(categories)
         self.system_prompt_template = system_prompt_template
         self.system_prompt = system_prompt_template.format(
             categories=categories, schema=self.categories_model.model_json_schema()
@@ -62,7 +62,13 @@ class LLMTextClassifier:
 
         for example in self.fetch_examples(text=text):
             messages.append(HumanMessage(content=example.page_content))
-            messages.append(AIMessage(content=example.metadata["label"]))
+            messages.append(
+                AIMessage(
+                    content=self.categories_model(
+                        category=example.metadata["label"]
+                    ).model_dump_json()
+                )
+            )
 
         messages.append(HumanMessage(content=text))
         prediction = self.llm_classifier.invoke(messages)
@@ -109,7 +115,7 @@ class LLMTextClassifier:
 
 
 if __name__ == "__main__":
-    classifier = LLMTextClassifier(categories=["news", "clickbait"])
+    classifier = LLMTextMultiClassClassifier(categories=["news", "clickbait"])
 
     print(
         classifier.predict("You won't believe what happened next! Watch for more")

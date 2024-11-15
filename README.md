@@ -25,13 +25,13 @@ The following example demonstrates how to use `llmclassifier` to set up an LLM-b
 ```python
 import os
 from dotenv import load_dotenv
-from llmclassifier import LLMTextClassifier
+from llmclassifier import LLMTextMultiClassClassifier
 
 # Load environment variables containing API credentials
 load_dotenv()
 
 categories = ["news", "clickbait"]
-classifier = LLMTextClassifier(categories=categories, max_examples=1)
+classifier = LLMTextMultiClassClassifier(categories=categories, max_examples=1)
 
 texts = ["Donald trump won michigan", "You won't believe what happened next!"]
 labels = ["news", "clickbait"]
@@ -66,8 +66,7 @@ To use `llmclassifier` with OpenAI-compatible models, ensure you have the follow
 ```bash
 export LLM_BASE_URL=<Your LLM API Base URL>
 export LLM_API_KEY=<Your API Key>
-export MEDIUM_MODEL=modelname1
-export LARGE_MODEL=modelname1
+export MODEL_NAME=modelname1
 ```
 
 Alternatively, you can set these variables in a `.env` file, and load it with `dotenv`.

@@ -3,7 +3,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-def generate_classification_model(list_classes: list[str]):
+def generate_multi_class_classification_model(list_classes: list[str]):
     assert list_classes
 
     class ClassificationOutput(BaseModel):
@@ -13,7 +13,7 @@ def generate_classification_model(list_classes: list[str]):
 
 
 if __name__ == "__main__":
-    Categories = generate_classification_model(["Yes", "No"])
+    Categories = generate_multi_class_classification_model(["Yes", "No"])
 
     categories = Categories(category="Yes")
 
