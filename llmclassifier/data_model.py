@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import List, Literal
 
 from pydantic import BaseModel
 
@@ -8,6 +8,15 @@ def generate_multi_class_classification_model(list_classes: list[str]):
 
     class ClassificationOutput(BaseModel):
         category: Literal[tuple(list_classes)]
+
+    return ClassificationOutput
+
+
+def generate_multi_label_classification_model(list_classes: list[str]):
+    assert list_classes
+
+    class ClassificationOutput(BaseModel):
+        category: List[Literal[tuple(list_classes)]]
 
     return ClassificationOutput
 

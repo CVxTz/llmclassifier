@@ -1,12 +1,15 @@
 import pytest
 
+from llmclassifier.llm_clients import llm_openai_client
 from llmclassifier.llm_text_classifier import LLMTextMultiClassClassifier
 
 
 def test_llm_text_classifier():
     # Define the categories and create the classifier
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories
+    )
 
     # Test the classify method with a sample text
     text = "You won't believe what happened next! Watch for more"
@@ -25,7 +28,9 @@ def test_llm_text_classifier():
 
 def test_llm_text_classifier_fit():
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories
+    )
 
     texts = ["Donald trump won michigan", "You won't believe what happened next!"]
     labels = ["news", "clickbait"]
@@ -42,7 +47,9 @@ def test_llm_text_classifier_fit():
 
 def test_llm_text_classifier_fetch_examples():
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories
+    )
 
     texts = ["Donald trump won michigan", "You won't believe what happened next!"]
     labels = ["news", "clickbait"]
@@ -60,7 +67,9 @@ def test_llm_text_classifier_fetch_examples():
 
 def test_llm_text_classifier_fetch_examples_chroma():
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories, max_examples=1)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories, max_examples=1
+    )
 
     texts = ["Donald trump won michigan", "You won't believe what happened next!"]
     labels = ["news", "clickbait"]
@@ -76,7 +85,9 @@ def test_llm_text_classifier_fetch_examples_chroma():
 
 def test_llm_text_classifier_classify():
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories, max_examples=1)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories, max_examples=1
+    )
 
     texts = ["Donald trump won michigan", "You won't believe what happened next!"]
     labels = ["news", "clickbait"]
@@ -92,7 +103,9 @@ def test_llm_text_classifier_classify():
 
 def test_llm_text_classifier_invalid_input():
     categories = ["news", "clickbait"]
-    classifier = LLMTextMultiClassClassifier(categories=categories)
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=categories
+    )
 
     # Test with empty text
     with pytest.raises(AssertionError):

@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
 
 jobs:

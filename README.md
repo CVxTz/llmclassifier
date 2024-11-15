@@ -65,8 +65,8 @@ To use `llmclassifier` with OpenAI-compatible models, ensure you have the follow
 
 ```bash
 export LLM_BASE_URL=<Your LLM API Base URL>
-export LLM_API_KEY=<Your API Key>
-export MODEL_NAME=modelname1
+export OPENAI_API_KEY=<Your API Key>
+export OPENAI_MODEL_NAME=modelname1
 ```
 
 Alternatively, you can set these variables in a `.env` file, and load it with `dotenv`.
@@ -74,3 +74,8 @@ Alternatively, you can set these variables in a `.env` file, and load it with `d
 ## Contributing
 
 Contributions are welcome! Feel free to submit pull requests or report issues to improve the functionality and usability of `llmclassifier`.
+
+
+## Datasets
+
+https://github.com/unsplash/datasets/blob/master/how-to/python/pandas.ipynb 

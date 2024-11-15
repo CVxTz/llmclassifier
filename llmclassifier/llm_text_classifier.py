@@ -8,7 +8,6 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 
 from llmclassifier.data_model import generate_multi_class_classification_model
-from llmclassifier.llm_clients import llm_openai_client
 
 
 class ChromaEmbeddingsAdapter(Embeddings):
@@ -25,13 +24,13 @@ class ChromaEmbeddingsAdapter(Embeddings):
 class LLMTextMultiClassClassifier:
     def __init__(
         self,
+        llm_client: BaseChatModel,
         categories: list[str],
         system_prompt_template: PromptTemplate = PromptTemplate(
             input_variables=["categories", "schema"],
             template="Classify the following text into one of the following classes: {categories}.\n "
             "Use the following schema: {schema}",
         ),
-        llm_client: BaseChatModel = llm_openai_client,
         max_examples: int = 5,
     ):
         assert set(
@@ -115,7 +114,11 @@ class LLMTextMultiClassClassifier:
 
 
 if __name__ == "__main__":
-    classifier = LLMTextMultiClassClassifier(categories=["news", "clickbait"])
+    from llmclassifier.llm_clients import llm_openai_client
+
+    classifier = LLMTextMultiClassClassifier(
+        llm_client=llm_openai_client, categories=["news", "clickbait"]
+    )
 
     print(
         classifier.predict("You won't believe what happened next! Watch for more")
