@@ -1,5 +1,5 @@
-from .llm_text_classifier import LLMTextMultiClassClassifier
+from .llm_text_classifier import LLMTextClassifier
 
 __version__ = "0.1.0"
 
-__all__ = ["LLMTextMultiClassClassifier"]
+__all__ = ["LLMTextClassifier"]

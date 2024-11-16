@@ -4,7 +4,7 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics import accuracy_score
 from tqdm import tqdm
 
-from llmclassifier import LLMTextMultiClassClassifier
+from llmclassifier import LLMTextClassifier
 from llmclassifier.llm_clients import llm_openai_client
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     categories = list(set(Y_train))
 
-    classifier = LLMTextMultiClassClassifier(
+    classifier = LLMTextClassifier(
         categories=categories, max_examples=max_examples, llm_client=llm_openai_client
     )  # Zero shot
     classifier.fit(X_train[:max_examples], Y_train[:max_examples])  # Few shot

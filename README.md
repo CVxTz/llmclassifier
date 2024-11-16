@@ -25,13 +25,13 @@ The following example demonstrates how to use `llmclassifier` to set up an LLM-b
 ```python
 import os
 from dotenv import load_dotenv
-from llmclassifier import LLMTextMultiClassClassifier
+from llmclassifier import LLMTextClassifier
 
 # Load environment variables containing API credentials
 load_dotenv()
 
 categories = ["news", "clickbait"]
-classifier = LLMTextMultiClassClassifier(categories=categories, max_examples=1)
+classifier = LLMTextClassifier(categories=categories, max_examples=1)
 
 texts = ["Donald trump won michigan", "You won't believe what happened next!"]
 labels = ["news", "clickbait"]

@@ -6,10 +6,13 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 
-from llmclassifier.data_model import generate_multi_label_classification_model
+from llmclassifier.data_model import (
+    generate_multi_class_classification_model,
+    generate_multi_label_classification_model,
+)
 
 
-class LLMMultiModalMultiLabelClassifier:
+class LLMMultiModalClassifier:
     def __init__(
         self,
         llm_client: BaseChatModel,
@@ -19,6 +22,7 @@ class LLMMultiModalMultiLabelClassifier:
             template="Classify the following content into one of the following classes: {categories}.\n "
             "Use the following schema: {schema}",
         ),
+        multi_label: bool = False,
     ):
         assert set(
             system_prompt_template.input_variables
@@ -26,7 +30,15 @@ class LLMMultiModalMultiLabelClassifier:
             {"categories", "schema"}
         ), "System prompt template should be included in the following input variables: categories, schema"
         self.categories = categories
-        self.categories_model = generate_multi_label_classification_model(categories)
+        if multi_label:
+            self.categories_model = generate_multi_label_classification_model(
+                categories
+            )
+        else:
+            self.categories_model = generate_multi_class_classification_model(
+                categories
+            )
+
         self.system_prompt_template = system_prompt_template
         self.system_prompt = system_prompt_template.format(
             categories=categories, schema=self.categories_model.model_json_schema()
@@ -71,8 +83,8 @@ if __name__ == "__main__":
     ) as f:
         _categories = json.load(f)
 
-    classifier = LLMMultiModalMultiLabelClassifier(
-        llm_client=llm_google_client, categories=_categories
+    classifier = LLMMultiModalClassifier(
+        llm_client=llm_google_client, categories=_categories, multi_label=True
     )
 
     unsplash_url = "https://images.unsplash.com/photo-1546561927-370e6e533f9b"

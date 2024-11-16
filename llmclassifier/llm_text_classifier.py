@@ -7,7 +7,10 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 
-from llmclassifier.data_model import generate_multi_class_classification_model
+from llmclassifier.data_model import (
+    generate_multi_class_classification_model,
+    generate_multi_label_classification_model,
+)
 
 
 class ChromaEmbeddingsAdapter(Embeddings):
@@ -21,7 +24,7 @@ class ChromaEmbeddingsAdapter(Embeddings):
         return self.ef([query])[0]
 
 
-class LLMTextMultiClassClassifier:
+class LLMTextClassifier:
     def __init__(
         self,
         llm_client: BaseChatModel,
@@ -32,6 +35,7 @@ class LLMTextMultiClassClassifier:
             "Use the following schema: {schema}",
         ),
         max_examples: int = 5,
+        multi_label: bool = False,
     ):
         assert set(
             system_prompt_template.input_variables
@@ -39,7 +43,15 @@ class LLMTextMultiClassClassifier:
             {"categories", "schema"}
         ), "System prompt template should be included in the following input variables: categories, schema"
         self.categories = categories
-        self.categories_model = generate_multi_class_classification_model(categories)
+        if multi_label:
+            self.categories_model = generate_multi_label_classification_model(
+                categories
+            )
+        else:
+            self.categories_model = generate_multi_class_classification_model(
+                categories
+            )
+
         self.system_prompt_template = system_prompt_template
         self.system_prompt = system_prompt_template.format(
             categories=categories, schema=self.categories_model.model_json_schema()
@@ -72,7 +84,7 @@ class LLMTextMultiClassClassifier:
         messages.append(HumanMessage(content=text))
         prediction = self.llm_classifier.invoke(messages)
 
-        return prediction.category
+        return prediction.category.value
 
     def fit(self, texts, labels):
         assert set(labels).issubset(
@@ -116,7 +128,7 @@ class LLMTextMultiClassClassifier:
 if __name__ == "__main__":
     from llmclassifier.llm_clients import llm_openai_client
 
-    classifier = LLMTextMultiClassClassifier(
+    classifier = LLMTextClassifier(
         llm_client=llm_openai_client, categories=["news", "clickbait"]
     )
 
