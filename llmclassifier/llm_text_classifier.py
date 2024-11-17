@@ -84,7 +84,7 @@ class LLMTextClassifier:
         messages.append(HumanMessage(content=text))
         prediction = self.llm_classifier.invoke(messages)
 
-        return prediction.category.value
+        return prediction.category
 
     def fit(self, texts, labels):
         assert set(labels).issubset(

@@ -10,6 +10,7 @@ on:
 env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
 
 jobs:
   build:

@@ -87,16 +87,9 @@ if __name__ == "__main__":
         llm_client=llm_google_client, categories=_categories, multi_label=True
     )
 
-    unsplash_url = "https://images.unsplash.com/photo-1546561927-370e6e533f9b"
+    unsplash_url = "https://images.unsplash.com/photo-1551205379-24fa06ec1928"
     resize_arg = "?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjYyMzc5fQ"
     print(unsplash_url + resize_arg)
-    _text = (
-        "So we were looking for urban explorations! After hours of shooting, we found this place who actually has "
-        "a strange color palette! It mostly has a red hue, but the soft blue tones kill it completely! Also it’s "
-        "the result of using multiple objects to recreate rainbows and create a colorful atmosphere. Of course,"
-        " it also proves that location isn’t everything when you’re focused on transmitting concrete emotions to "
-        "the viewer and self-expressing your art. Sincerely, one of my favorites for those brilliant tones and "
-        "composition!"
-    )
+    _text = "black and white coated dog"
 
-    print(classifier.predict(text=_text, image_url=unsplash_url + resize_arg))
+    print(classifier.predict(text=" ", image_url=unsplash_url + resize_arg))
